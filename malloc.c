@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <malloc.h>
 
-typedef struct {
+typedef struct
+{
   int weight;
   int height;
 } Person;
 
 int main(int argc, char const *argv[])
 {
-  int* y = (int*) malloc(sizeof(int));
+  int *y = (int *)malloc(sizeof(int));
   *y = 20;
 
   int z = sizeof(int);
@@ -20,7 +21,7 @@ int main(int argc, char const *argv[])
 
   printf("w=%i h=%i\n", person1.weight, person1.height);
 
-  Person* person2 = (Person*) malloc(sizeof(Person));
+  Person *person2 = (Person *)malloc(sizeof(Person));
   person2->weight = 50;
   person2->height = 160;
 
@@ -28,4 +29,3 @@ int main(int argc, char const *argv[])
 
   return 0;
 }
-
