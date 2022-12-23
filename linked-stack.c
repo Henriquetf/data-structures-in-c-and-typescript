@@ -2,8 +2,6 @@
 #include <stdbool.h>
 #include <malloc.h>
 
-#define MAX_STACK_SIZE 50
-
 typedef int Key;
 
 typedef struct Record
