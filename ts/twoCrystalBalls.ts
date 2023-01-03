@@ -1,4 +1,4 @@
-export function twoCrystalBalls<T>(breaks: boolean[]): number {
+export function twoCrystalBalls(breaks: boolean[]): number {
   const jumpAmount = Math.floor(Math.sqrt(breaks.length));
 
   let firstBreakIndex = Math.min(jumpAmount, breaks.length);
