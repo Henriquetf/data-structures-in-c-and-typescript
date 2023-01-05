@@ -1,12 +1,12 @@
-interface QueueNode<T> {
+interface StackNode<T> {
   value: T;
-  next?: QueueNode<T>;
+  next?: StackNode<T>;
 }
 
-export class Queue<T> {
+export class Stack<T> {
   public length: number;
-  private head?: QueueNode<T>;
-  private tail?: QueueNode<T>;
+  private head?: StackNode<T>;
+  private tail?: StackNode<T>;
 
   constructor() {
     this.head = undefined;
@@ -14,26 +14,26 @@ export class Queue<T> {
     this.length = 0;
   }
 
-  enqueue(item: T): void {
-    const node: QueueNode<T> = {
+  push(item: T): void {
+    const node: StackNode<T> = {
       value: item,
       next: undefined,
     };
 
-    if (!this.tail) {
+    if (!this.head) {
       this.head = node;
       this.tail = node;
     } else {
-      this.tail.next = node;
-      this.tail = node;
+      node.next = this.head;
+      this.head = node;
     }
 
     this.length++;
   }
 
-  dequeue(): T | undefined {
+  pop(): T | undefined {
     if (!this.head) {
-      return undefined;
+      return;
     }
 
     const head = this.head;
