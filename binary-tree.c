@@ -170,7 +170,7 @@ void printNodeItems(Node *node, int level)
 void printBinaryTreeItems(BinaryTree *binaryTree)
 {
   printNodeItems(binaryTree->root, 0);
-    printf("\n");
+  printf("\n");
 }
 
 Node *removeNodeByKey(Node *rootNode, int key)
@@ -180,26 +180,35 @@ Node *removeNodeByKey(Node *rootNode, int key)
   Node *replacementNode = NULL;
   Node *replacementParent = NULL;
 
-  if (node == NULL) {
+  if (node == NULL)
+  {
     return rootNode;
   }
 
-  if (node->left == NULL || node->right == NULL) {
-    if (node->left == NULL) {
+  if (node->left == NULL || node->right == NULL)
+  {
+    if (node->left == NULL)
+    {
       replacementNode = node->right;
-    } else {
+    }
+    else
+    {
       replacementNode = node->left;
     }
-  } else {
+  }
+  else
+  {
     replacementParent = node;
     replacementNode = node->left;
 
-    while (replacementNode->right != NULL) {
+    while (replacementNode->right != NULL)
+    {
       replacementParent = replacementNode;
       replacementNode = replacementNode->right;
     }
 
-    if (replacementParent != node) {
+    if (replacementParent != node)
+    {
       replacementParent->right = replacementNode->left;
       replacementNode->left = node->left;
     }
@@ -207,14 +216,18 @@ Node *removeNodeByKey(Node *rootNode, int key)
     replacementNode->right = node->right;
   }
 
-  if (parentNode == NULL) {
+  if (parentNode == NULL)
+  {
     free(node);
     return replacementNode;
   }
 
-  if (key < parentNode->key) {
+  if (key < parentNode->key)
+  {
     parentNode->left = replacementNode;
-  } else {
+  }
+  else
+  {
     parentNode->right = replacementNode;
   }
 
@@ -223,7 +236,8 @@ Node *removeNodeByKey(Node *rootNode, int key)
   return rootNode;
 }
 
-void removeNodeByKeyInBinaryTree(BinaryTree *binaryTree, int key) {
+void removeNodeByKeyInBinaryTree(BinaryTree *binaryTree, int key)
+{
   binaryTree->root = removeNodeByKey(binaryTree->root, key);
 }
 
@@ -246,7 +260,8 @@ void emptyBinaryTree(BinaryTree *binaryTree)
   binaryTree->root = NULL;
 }
 
-void binaryTree1() {
+void binaryTree1()
+{
   BinaryTree *binaryTree = initBinaryTree();
 
   insertNodeIntoBinaryTree(binaryTree, initNode(5, 1));
@@ -279,7 +294,8 @@ void binaryTree1() {
   printBinaryTreeItems(binaryTree);
 }
 
-void binaryTree2() {
+void binaryTree2()
+{
   BinaryTree *binaryTree = initBinaryTree();
 
   insertNodeIntoBinaryTree(binaryTree, initNode(18, 18));
