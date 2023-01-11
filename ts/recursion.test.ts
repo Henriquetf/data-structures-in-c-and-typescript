@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.168.0/testing/asserts.ts";
-import { solveMaze, sum } from "./recursion.ts";
+import { plotPathFromMaze, solveMaze, sum } from "./recursion.ts";
 
 Deno.test("test sum 0", () => {
   assertEquals(sum(0), 0);
@@ -16,28 +16,6 @@ Deno.test("test sum 5", () => {
 Deno.test("test sum -1", () => {
   assertEquals(sum(0), 0);
 });
-
-function plotPathFromMaze(path: string[]) {
-  const char_A = 65;
-  const char_Z = 90;
-
-  const expectedPath = [];
-
-  for (let char = char_A; char <= char_Z; char++) {
-    const str = String.fromCharCode(char);
-
-    for (let y = 0; y < path.length; y++) {
-      const x = path[y].indexOf(str);
-
-      if (x >= 0) {
-        expectedPath.push({ y, x });
-        break;
-      }
-    }
-  }
-
-  return expectedPath;
-}
 
 Deno.test("test easy maze", () => {
   const maze = [
@@ -153,6 +131,30 @@ Deno.test("test open maze", () => {
     "ABCDE",
   ];
   const expectedPath = plotPathFromMaze(expectedPathMaze);
+
+  assertEquals(path, expectedPath);
+});
+
+Deno.test("test plotPathFromMaze", () => {
+  const pathMaze = [
+    "     ",
+    " GHI ",
+    " F   ",
+    " ED  ",
+    "ABC  ",
+  ];
+  const path = plotPathFromMaze(pathMaze);
+  const expectedPath = [
+    { x: 0, y: 4 },
+    { x: 1, y: 4 },
+    { x: 2, y: 4 },
+    { x: 2, y: 3 },
+    { x: 1, y: 3 },
+    { x: 1, y: 2 },
+    { x: 1, y: 1 },
+    { x: 2, y: 1 },
+    { x: 3, y: 1 },
+  ];
 
   assertEquals(path, expectedPath);
 });

@@ -120,3 +120,25 @@ export function solveMaze(
 
   return path;
 }
+
+export function plotPathFromMaze(path: string[]) {
+  const char_A = 65;
+  const char_Z = 90;
+
+  const expectedPath = [];
+
+  for (let char = char_A; char <= char_Z; char++) {
+    const str = String.fromCharCode(char);
+
+    for (let y = 0; y < path.length; y++) {
+      const x = path[y].indexOf(str);
+
+      if (x >= 0) {
+        expectedPath.push({ y, x });
+        break;
+      }
+    }
+  }
+
+  return expectedPath;
+}
