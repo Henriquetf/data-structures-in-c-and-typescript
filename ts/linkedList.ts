@@ -135,6 +135,9 @@ export class DoublyLinkedList<T> {
       this.tail = node.prev;
     }
 
+    node.next = undefined;
+    node.prev = undefined;
+
     this.length--;
 
     return node.value;
