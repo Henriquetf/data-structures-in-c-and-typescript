@@ -1,8 +1,8 @@
 import { assertEquals } from "https://deno.land/std@0.168.0/testing/asserts.ts";
-import { compareBreadthFirstSearch } from "./binaryTreeCompare.ts";
+import { compare } from "./binaryTreeCompareRecursion.ts";
 
 Deno.test("test both trees are equal", () => {
-  const treesAreEqual = compareBreadthFirstSearch({
+  const treesAreEqual = compare({
     value: 5,
     left: {
       value: 3,
@@ -66,7 +66,7 @@ Deno.test("test both trees are equal", () => {
 });
 
 Deno.test("test both trees are not equal", () => {
-  const treesAreEqual = compareBreadthFirstSearch({
+  const treesAreEqual = compare({
     value: 5,
     left: {
       value: 3,
@@ -130,7 +130,7 @@ Deno.test("test both trees are not equal", () => {
 });
 
 Deno.test("test both trees of depth 1 are equal", () => {
-  const treesAreEqual = compareBreadthFirstSearch({
+  const treesAreEqual = compare({
     value: 5,
   }, {
     value: 5,
@@ -140,17 +140,17 @@ Deno.test("test both trees of depth 1 are equal", () => {
 });
 
 Deno.test("test both trees of depth 1 are not equal", () => {
-  const treesAreEqual = compareBreadthFirstSearch({
+  const treesAreEqual = compare({
     value: 5,
   }, {
     value: 10,
   });
 
-  assertEquals(treesAreEqual, true);
+  assertEquals(treesAreEqual, false);
 });
 
-Deno.test("test both trees of without a right node are equal", () => {
-  const treesAreEqual = compareBreadthFirstSearch({
+Deno.test("test both trees without a right node are equal", () => {
+  const treesAreEqual = compare({
     value: 5,
     left: {
       value: 100,
@@ -165,8 +165,8 @@ Deno.test("test both trees of without a right node are equal", () => {
   assertEquals(treesAreEqual, true);
 });
 
-Deno.test("test both trees of without a left node are equal", () => {
-  const treesAreEqual = compareBreadthFirstSearch({
+Deno.test("test both trees without a left node are equal", () => {
+  const treesAreEqual = compare({
     value: 5,
     right: {
       value: 100,
@@ -182,7 +182,7 @@ Deno.test("test both trees of without a left node are equal", () => {
 });
 
 Deno.test("test both trees of depth 2 are equal", () => {
-  const treesAreEqual = compareBreadthFirstSearch({
+  const treesAreEqual = compare({
     value: 5,
     left: {
       value: 50,

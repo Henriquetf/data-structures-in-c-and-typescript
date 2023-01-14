@@ -27,7 +27,7 @@ export function compareBreadthFirstSearch<T>(
     if (node.right && nodeOther.right) {
       queue.enqueue(nodeOther.right);
       queue.enqueue(node.right);
-    } else if (node !== nodeOther) {
+    } else if (node.right !== nodeOther.right) {
       // if one node has a right node, but the other node not, they do not have the same structure
       return false;
     }
@@ -35,7 +35,7 @@ export function compareBreadthFirstSearch<T>(
     if (node.left && nodeOther.left) {
       queue.enqueue(nodeOther.left);
       queue.enqueue(node.left);
-    } else if (node !== nodeOther) {
+    } else if (node.left !== nodeOther.left) {
       return false;
     }
   }
