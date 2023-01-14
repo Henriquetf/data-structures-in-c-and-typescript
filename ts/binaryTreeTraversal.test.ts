@@ -1,12 +1,13 @@
 import { assertEquals } from "https://deno.land/std@0.168.0/testing/asserts.ts";
 import {
   BinaryNode,
+  breadthFirstSearch,
   inOrderSearch,
   postOrderSearch,
   preOrderSearch,
 } from "./binaryTreeTraversal.ts";
 
-Deno.test("test order search head is at the beginning of the search result", () => {
+Deno.test("test pre order search, head is at the beginning of the search result", () => {
   const head: BinaryNode<number> = {
     value: 2,
     left: {
@@ -22,7 +23,7 @@ Deno.test("test order search head is at the beginning of the search result", () 
   assertEquals(order, [2, 1, 3]);
 });
 
-Deno.test("test order search head is at the middle of the search result", () => {
+Deno.test("test in order search, head is at the middle of the search result", () => {
   const head: BinaryNode<number> = {
     value: 2,
     left: {
@@ -38,7 +39,7 @@ Deno.test("test order search head is at the middle of the search result", () => 
   assertEquals(order, [1, 2, 3]);
 });
 
-Deno.test("test order search head is at the end of the search result", () => {
+Deno.test("test post order search, head is at the end of the search result", () => {
   const head: BinaryNode<number> = {
     value: 2,
     left: {
@@ -163,4 +164,39 @@ Deno.test("test post order search", () => {
   const order = postOrderSearch(head);
 
   assertEquals(order, [2, 1, 4, 3, 7, 8, 6, 10, 9, 5]);
+});
+
+Deno.test("test breadth first search order is correct", () => {
+  const order = breadthFirstSearch({
+    value: 5,
+    left: {
+      value: 3,
+      left: {
+        value: 1,
+        right: {
+          value: 2,
+        },
+      },
+      right: {
+        value: 4,
+      },
+    },
+    right: {
+      value: 9,
+      left: {
+        value: 6,
+        right: {
+          value: 8,
+          left: {
+            value: 7,
+          },
+        },
+      },
+      right: {
+        value: 10,
+      },
+    },
+  });
+
+  assertEquals(order, [5, 3, 9, 1, 4, 6, 10, 2, 8, 7]);
 });

@@ -1,3 +1,5 @@
+import { Queue } from "./queue.ts";
+
 export interface BinaryNode<T> {
   value: T;
   left?: BinaryNode<T>;
@@ -58,6 +60,30 @@ export function postOrderSearch<T>(head: BinaryNode<T>): T[] {
   const order: T[] = [];
 
   walkPostOrder(head, order);
+
+  return order;
+}
+
+export function breadthFirstSearch<T>(head: BinaryNode<T>) {
+  const queue = new Queue<BinaryNode<T>>();
+
+  queue.enqueue(head);
+
+  const order: T[] = [];
+
+  while (!queue.isEmpty()) {
+    const currNode = queue.dequeue()!;
+
+    order.push(currNode.value);
+
+    if (currNode.left) {
+      queue.enqueue(currNode.left);
+    }
+
+    if (currNode.right) {
+      queue.enqueue(currNode.right);
+    }
+  }
 
   return order;
 }
