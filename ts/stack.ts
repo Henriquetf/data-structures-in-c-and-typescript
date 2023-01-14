@@ -57,4 +57,8 @@ export class Stack<T> {
   peekTail(): T | undefined {
     return this.tail?.value;
   }
+
+  isEmpty(): boolean {
+    return this.length === 0;
+  }
 }
