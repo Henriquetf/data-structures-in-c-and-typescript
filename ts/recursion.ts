@@ -122,8 +122,8 @@ export function solveMaze(
 }
 
 export function plotPathFromMaze(path: string[]) {
-  const char_A = 65;
-  const char_Z = 90;
+  const char_A = "A".charCodeAt(0);
+  const char_Z = "Z".charCodeAt(0);
 
   const expectedPath = [];
 
