@@ -6,6 +6,11 @@ export type WeightedAdjacencyList = GraphEdge[][];
 
 type Path = number[];
 
+interface SearchResult {
+  path: Path;
+  weight: number;
+}
+
 function walk(
   graph: WeightedAdjacencyList,
   curr: number,
@@ -52,7 +57,7 @@ export function depthFirstSearchGraphList(
   graph: WeightedAdjacencyList,
   source: number, // initial node
   needle: number, // node we're looking for
-): Path | null {
+): SearchResult | null {
   const seen: boolean[] = new Array(graph.length).fill(false);
   const path: Path = [];
 
@@ -60,5 +65,19 @@ export function depthFirstSearchGraphList(
     return null;
   }
 
-  return path;
+  let weight = 0;
+
+  for (let pathIndex = 0; pathIndex < path.length - 1; pathIndex++) {
+    const vertex = path[pathIndex];
+    const edges = graph[vertex];
+    const nextVertex = path[pathIndex + 1];
+    const edge = edges.find((e) => e.to === nextVertex);
+
+    weight += edge!.weight;
+  }
+
+  return {
+    path: path,
+    weight,
+  };
 }

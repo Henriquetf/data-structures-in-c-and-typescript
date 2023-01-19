@@ -26,7 +26,10 @@ Deno.test("test simple matrix path", () => {
       source,
       needle,
     ),
-    expectedPath,
+    {
+      path: expectedPath,
+      weight: 5 + 2,
+    },
   );
 });
 
@@ -63,7 +66,10 @@ Deno.test("test complex matrix path", () => {
       source,
       needle,
     ),
-    expectedPath,
+    {
+      path: expectedPath,
+      weight: 3 + 1 + 2 + 1,
+    },
   );
 });
 

@@ -4,11 +4,16 @@ type WeightedAdjacencyMatrix = number[][];
 
 type Path = number[];
 
+interface SearchResult {
+  path: Path;
+  weight: number;
+}
+
 export function breadthFirstSearchGraphMatrix(
   graph: WeightedAdjacencyMatrix,
   source: number, // initial node
   needle: number, // node we're looking for
-): Path | null {
+): SearchResult | null {
   const seen: boolean[] = new Array(graph.length).fill(false);
   const prev: number[] = new Array(graph.length).fill(-1);
 
@@ -47,9 +52,11 @@ export function breadthFirstSearchGraphMatrix(
 
   const path: Path = [];
   let currVertex = needle;
+  let weight = 0;
 
   while (prev[currVertex] !== -1) {
     path.push(currVertex);
+    weight += graph[prev[currVertex]][currVertex];
     currVertex = prev[currVertex];
   }
 
@@ -59,5 +66,8 @@ export function breadthFirstSearchGraphMatrix(
 
   path.push(source);
 
-  return path.reverse();
+  return {
+    path: path.reverse(),
+    weight,
+  };
 }

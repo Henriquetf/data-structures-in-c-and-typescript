@@ -16,7 +16,10 @@ Deno.test("test simple matrix path", () => {
     { to: 1, weight: 4 },
   ];
 
-  assertEquals(depthFirstSearchGraphList(graph, 0, 1), [0, 2, 1]);
+  assertEquals(depthFirstSearchGraphList(graph, 0, 1), {
+    path: [0, 2, 1],
+    weight: 3 + 4,
+  });
 });
 
 Deno.test("test complex matrix path 1", () => {
@@ -60,7 +63,10 @@ Deno.test("test complex matrix path 1", () => {
     { to: 5, weight: 1 },
   ];
 
-  assertEquals(depthFirstSearchGraphList(graph, 0, 6), [0, 1, 2, 3, 4, 5, 6]);
+  assertEquals(depthFirstSearchGraphList(graph, 0, 6), {
+    path: [0, 1, 2, 3, 4, 5, 6],
+    weight: 3 + 4 + 7 + 5 + 2 + 1,
+  });
 });
 
 Deno.test("test complex matrix path 2", () => {
