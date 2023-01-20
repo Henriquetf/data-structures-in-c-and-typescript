@@ -25,4 +25,7 @@ Deno.test("test LRU", function () {
   assertEquals(lru.get("cat"), 100);
 
   assertEquals(lru.get("borb"), undefined);
+
+  lru.set("cat", 200);
+  assertEquals(lru.get("cat"), 200);
 });

@@ -1,45 +1,67 @@
-interface Node<T> {
-  value: T;
-  next?: Node<T>;
-  prev?: Node<T>;
+interface Node<V> {
+  value: V;
+  next?: Node<V>;
+  prev?: Node<V>;
 }
 
-class DoublyLinkedList<T> {
+class Cache<K, V> {
+  private lookup: Map<K, V>;
+  private reverseLookup: Map<V, K>;
+
+  constructor() {
+    this.lookup = new Map<K, V>();
+    this.reverseLookup = new Map<V, K>();
+  }
+
+  get(key: K): V | undefined {
+    return this.lookup.get(key);
+  }
+
+  set(key: K, value: V): void {
+    this.lookup.set(key, value);
+    this.reverseLookup.set(value, key);
+  }
+
+  deleteByValue(value: V): void {
+    const lruKey = this.reverseLookup.get(value);
+
+    if (!lruKey) {
+      throw new Error("Could not find LRU key by node");
+    }
+
+    this.reverseLookup.delete(value);
+    this.lookup.delete(lruKey);
+  }
+}
+
+class DoublyLinkedList<V> {
   public length: number;
-  private head?: Node<T>;
-  private tail?: Node<T>;
+  private head?: Node<V>;
+  private tail?: Node<V>;
 
   constructor() {
     this.length = 0;
     this.head = undefined;
+    this.tail = undefined;
   }
 
-  prepend(item: T): Node<T> {
-    const oldHead = this.head;
-
-    this.head = {
+  prepend(item: V): Node<V> {
+    this.setHead({
       value: item,
-      next: oldHead,
-      prev: undefined,
-    };
-
-    if (oldHead) {
-      oldHead.prev = this.head;
-    }
-    if (!this.tail) {
-      this.tail = this.head;
-    }
+    });
 
     this.length++;
 
-    return this.head;
+    return this.head!;
   }
 
-  pop(): Node<T> | undefined {
+  pop(): Node<V> | undefined {
     const node = this.tail;
 
     if (node) {
-      this.removeNode(node);
+      this.detachNode(node);
+
+      this.length--;
 
       return node;
     }
@@ -47,35 +69,29 @@ class DoublyLinkedList<T> {
     return undefined;
   }
 
-  moveToHead(node: Node<T>) {
-    const oldHead = this.head;
-
-    if (oldHead === node) {
+  moveToHead(node: Node<V>) {
+    if (this.head === node) {
       return;
     }
 
-    if (this.tail === node) {
-      this.tail = node.prev;
-    }
-
-    this.head = node;
-
-    if (oldHead) {
-      oldHead.prev = node;
-    }
-
-    node.next = oldHead;
-
-    if (node.prev) {
-      node.prev.next = node.next;
-    }
-    if (node.next) {
-      node.next.prev = node.prev;
-    }
+    this.detachNode(node);
+    this.setHead(node);
   }
 
-  private removeNode(node: Node<T>) {
-    if (this.head === this.tail) {
+  private setHead(node: Node<V>) {
+    if (this.head) {
+      this.head.prev = node;
+    }
+    if (!this.tail) {
+      this.tail = node;
+    }
+
+    node.next = this.head;
+    this.head = node;
+  }
+
+  private detachNode(node: Node<V>): void {
+    if (node === this.head && node === this.tail) {
       this.head = undefined;
       this.tail = undefined;
     } else if (node === this.head) {
@@ -93,16 +109,13 @@ class DoublyLinkedList<T> {
 
     node.next = undefined;
     node.prev = undefined;
-
-    this.length--;
   }
 }
 
 export class LRU<K, V> {
   private capacity: number;
+  private cache: Cache<K, Node<V>>;
   private list: DoublyLinkedList<V>;
-  private lookup: Map<K, Node<V>>;
-  private reverseLookup: Map<Node<V>, K>;
 
   constructor(capacity: number = 10) {
     if (capacity <= 0) {
@@ -110,30 +123,28 @@ export class LRU<K, V> {
     }
 
     this.capacity = capacity;
-
+    this.cache = new Cache<K, Node<V>>();
     this.list = new DoublyLinkedList<V>();
-    this.lookup = new Map<K, Node<V>>();
-    this.reverseLookup = new Map<Node<V>, K>();
   }
 
   set(key: K, value: V): void {
-    const node = this.lookup.get(key);
+    const node = this.cache.get(key);
 
     if (node === undefined) {
       this.create(key, value);
     } else {
-      this.setMru(node);
+      this.update(node, value);
     }
   }
 
   get(key: K): V | undefined {
-    const node = this.lookup.get(key);
+    const node = this.cache.get(key);
 
     if (!node) {
       return undefined;
     }
 
-    this.setMru(node);
+    this.list.moveToHead(node);
 
     return node.value;
   }
@@ -142,13 +153,12 @@ export class LRU<K, V> {
     this.removeLru();
 
     const node = this.list.prepend(value);
-
-    this.lookup.set(key, node);
-    this.reverseLookup.set(node, key);
+    this.cache.set(key, node);
   }
 
-  private setMru(node: Node<V>) {
+  private update(node: Node<V>, value: V) {
     this.list.moveToHead(node);
+    node.value = value;
   }
 
   private removeLru() {
@@ -159,14 +169,7 @@ export class LRU<K, V> {
     const lruNode = this.list.pop();
 
     if (lruNode) {
-      const lruKey = this.reverseLookup.get(lruNode);
-
-      if (!lruKey) {
-        throw new Error("Could not find LRU key by node");
-      }
-
-      this.reverseLookup.delete(lruNode);
-      this.lookup.delete(lruKey);
+      this.cache.deleteByValue(lruNode);
     }
   }
 }
