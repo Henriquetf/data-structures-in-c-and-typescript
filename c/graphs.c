@@ -21,6 +21,10 @@ typedef struct
   Vertex *vertices;
 } Graph;
 
+#define NOT_SEEN 0
+#define SEEN 1
+#define SEEN_NOT_FOUND 2
+
 Graph *initGraph(int numVertices)
 {
   Graph *graph = malloc(sizeof(Graph));
@@ -72,6 +76,44 @@ bool addEdge(Graph *graph, int ourVertex, int targetVertex, int weight)
   graph->numEdges++;
 
   return true;
+}
+
+void visitVertexDepth(Graph *graph, int vertex, int *states)
+{
+  states[vertex] = SEEN;
+
+  Edge *edge = graph->vertices[vertex].head;
+
+  while (edge != NULL)
+  {
+    if (states[edge->vertex] == NOT_SEEN)
+    {
+      visitVertexDepth(graph, edge->vertex, states);
+    }
+
+    edge = edge->next;
+  }
+
+  states[vertex] = SEEN_NOT_FOUND;
+}
+
+void depth(Graph *graph)
+{
+  int states[graph->numVertices];
+
+  // reset graphs state
+  for (int vertex = 0; vertex < graph->numVertices; vertex++)
+  {
+    states[vertex] = NOT_SEEN;
+  }
+
+  for (int vertex = 0; vertex < graph->numVertices; vertex++)
+  {
+    if (states[vertex] == NOT_SEEN)
+    {
+      visitVertexDepth(graph, vertex, states);
+    }
+  }
 }
 
 void printGraph(Graph *graph)
